@@ -1,26 +1,32 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <v-app>
+    <v-main>
+      <v-container>
+        <v-row class="text-center">
+          <v-col cols="12"><h3>Mortgage Calculator</h3></v-col>
+          <v-col cols="12">
+            <FormComponent />
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-main>
+  </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue';
+// import HelloWorld from "./components/HelloWorld.vue";
+
+import FormComponent from "./components/FormComponent.vue";
 
 export default {
-  name: 'App',
+  name: "App",
+
   components: {
-    HelloWorld,
+    FormComponent,
   },
+
+  data: () => ({
+    //
+  }),
 };
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
