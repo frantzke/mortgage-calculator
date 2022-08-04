@@ -60,6 +60,7 @@
 
 <script>
 import { roundTo } from "round-to";
+import { mapActions } from "vuex";
 
 export default {
   name: "FormComponent",
@@ -103,6 +104,7 @@ export default {
   },
 
   methods: {
+    ...mapActions(["updateSchedule"]),
     generateTerms(numYears) {
       const terms = Array(numYears)
         .fill(0)
@@ -165,6 +167,9 @@ export default {
         totalPayments,
       });
 
+      //Update Schedule
+      this.updateSchedule({ schedule });
+
       const totalInterest = roundTo(schedule[schedule.length - 1].interestPaid, 2);
 
       const summary = {
@@ -205,14 +210,14 @@ export default {
         const principalPayment = roundTo(monthlyPayment - amount * monthlyRate, 2);
         const interestPayment = roundTo(monthlyPayment - principalPayment, 2);
 
-        amount -= principalPayment;
-        interestPaid += interestPayment;
+        amount -= roundTo(principalPayment, 2);
+        interestPaid += roundTo(interestPayment, 2);
         schedule.push({
           period: i + 1,
           principalPayment,
           interestPayment,
-          principalBalance: amount,
-          interestPaid,
+          principalBalance: roundTo(amount, 2),
+          interestPaid: roundTo(interestPaid, 2),
         });
       }
 

@@ -7,6 +7,9 @@
           <v-col cols="12">
             <FormComponent />
           </v-col>
+          <v-col cols="12">
+            <ScheduleTable />
+          </v-col>
         </v-row>
       </v-container>
     </v-main>
@@ -14,19 +17,17 @@
 </template>
 
 <script>
-// import HelloWorld from "./components/HelloWorld.vue";
-
 import FormComponent from "./components/FormComponent.vue";
+import ScheduleTable from "./components/ScheduleTable.vue";
 
 export default {
   name: "App",
 
   components: {
     FormComponent,
+    ScheduleTable,
   },
 
-  data: () => ({
-    //
-  }),
+  data: () => ({}),
 };
 </script>
