@@ -8,6 +8,9 @@
             <FormComponent />
           </v-col>
           <v-col cols="12">
+            <SummaryComponent />
+          </v-col>
+          <v-col cols="12">
             <ScheduleTable />
           </v-col>
         </v-row>
@@ -19,6 +22,7 @@
 <script>
 import FormComponent from "./components/FormComponent.vue";
 import ScheduleTable from "./components/ScheduleTable.vue";
+import SummaryComponent from "./components/SummaryComponent.vue";
 
 export default {
   name: "App",
@@ -26,6 +30,7 @@ export default {
   components: {
     FormComponent,
     ScheduleTable,
+    SummaryComponent,
   },
 
   data: () => ({}),

@@ -38,22 +38,6 @@
         </v-col>
       </v-row>
       <v-btn class="my-4" @click="submit">Calculate </v-btn>
-      <div v-if="summary" class="text-left">
-        <h3>
-          Over the <b>{{ summary.period }}</b
-          >-year amortization period, you will:
-        </h3>
-        <ul class="ml-8">
-          <li>
-            have made {{ summary.totalPayments }} monthly ({{ summary.yearlyPayments }}x per year)
-            payments of ${{ summary.monthlyPayment }}.
-          </li>
-          <li>
-            have paid ${{ summary.amount }} in principal, ${{ summary.totalInterest }} in interest,
-            for a total of ${{ summary.totalPaid }}.
-          </li>
-        </ul>
-      </div>
     </v-container>
   </form>
 </template>
@@ -61,6 +45,8 @@
 <script>
 import { roundTo } from "round-to";
 import { mapActions } from "vuex";
+
+import { calculateMonthlyPayment, calculateAmortizationSchedule } from "../helpers/calculations";
 
 export default {
   name: "FormComponent",
@@ -92,7 +78,6 @@ export default {
     ],
     term: 5,
     terms: null,
-    summary: null,
     schedule: [],
   }),
 
@@ -104,7 +89,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(["updateSchedule"]),
+    ...mapActions(["updateSchedule", "updateSummary"]),
     generateTerms(numYears) {
       const terms = Array(numYears)
         .fill(0)
@@ -132,35 +117,45 @@ export default {
     submit() {
       //TODO: Should validate inputs here
 
+      // Show message for invalid inputs
+
       this.calculateMortgage({
         amount: this.amount,
         rate: this.rate,
         amortization: this.period,
         frequency: this.frequency,
+        mortgageTerm: this.term,
       });
     },
-    calculateMortgage({ amount, rate, amortization, frequency }) {
+    calculateMortgage({ amount, rate, amortization, frequency, mortgageTerm }) {
       // Handle invalid inputs
       const amt = parseFloat(amount);
       const yearlyRate = parseFloat(rate) / 100;
       const period = parseInt(amortization);
       const yearlyPayments = parseInt(frequency);
-      if (isNaN(amt) || isNaN(yearlyRate) || isNaN(period) || isNaN(yearlyPayments)) {
+      const term = parseInt(mortgageTerm);
+      if (
+        isNaN(amt) ||
+        isNaN(yearlyRate) ||
+        isNaN(period) ||
+        isNaN(yearlyPayments) ||
+        isNaN(term)
+      ) {
         console.error("calculateMortgage: invalid input");
         return {};
       }
 
-      const monthlyPayment = this.calculateMonthlyPayment({
+      const monthlyPayment = calculateMonthlyPayment({
         amount: amt,
         yearlyRate,
         period,
-        yearlyPayments,
+        numYearlyPayments: yearlyPayments,
       });
 
       const totalPayments = yearlyPayments * period;
-      //TODO: Iterate through total payments
+
       // Calculate principal + interest amounts
-      const schedule = this.calculateAmortizationSchedule({
+      const schedule = calculateAmortizationSchedule({
         monthlyPayment,
         initalAmount: amount,
         yearlyRate,
@@ -172,6 +167,13 @@ export default {
 
       const totalInterest = roundTo(schedule[schedule.length - 1].interestPaid, 2);
 
+      const termPayments = term * yearlyPayments;
+
+      const endOfTerm = schedule[termPayments - 1];
+      const termPricipalPaid = amount - endOfTerm.principalBalance;
+      const termInterestPaid = endOfTerm.interestPaid;
+      const termTotalPaid = termPricipalPaid + termInterestPaid;
+
       const summary = {
         period,
         totalPayments,
@@ -180,8 +182,16 @@ export default {
         amount,
         totalInterest,
         totalPaid: roundTo(amount + totalInterest, 2),
+        term,
+        termPayments,
+        termPricipalPaid,
+        termInterestPaid,
+        termTotalPaid,
+        termBalance: endOfTerm.principalBalance,
       };
-      this.summary = summary;
+
+      this.updateSummary({ summary });
+      // this.summary = summary;
     },
 
     calculateMonthlyPayment({ amount, yearlyRate, period, yearlyPayments }) {
