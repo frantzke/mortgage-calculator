@@ -1,7 +1,20 @@
-const { roundTo } = require("round-to");
+const round = (num) => {
+  return Math.round(num * 100) / 100;
+};
 
 const calculateMonthlyPayment = function ({ amount, yearlyRate, period, numYearlyPayments }) {
-  const monthlyRate = yearlyRate / 12;
+  //TODO: Handle invalid inputs here for tests
+  const amt = parseFloat(amount);
+  const rate = parseFloat(yearlyRate);
+  if (isNaN(amt) || amt < 0 || isNaN(rate) || rate < 0) {
+    console.log(`calculateMonthlyPayment: ${amount} is invalid`);
+    return 0;
+  }
+  //yearlyRate should be between 1.00 and 0.00
+
+  //period should be between 1 and 30
+
+  const monthlyRate = rate / 12;
   const totalPayments = numYearlyPayments * period;
 
   // Total Monthly Payment = Loan Amount [ i (1+i) ^ n / ((1+i) ^ n) - 1) ]
@@ -11,8 +24,8 @@ const calculateMonthlyPayment = function ({ amount, yearlyRate, period, numYearl
   // a 30-year mortgage loan would have 360 payments (30 years x 12 months).
   const numerator = monthlyRate * (1 + monthlyRate) ** totalPayments;
   const denom = (monthlyRate + 1) ** totalPayments - 1;
-  const monthlyPayment = amount * (numerator / denom);
-  return Math.round(monthlyPayment * 100) / 100;
+  const monthlyPayment = amt * (numerator / denom);
+  return round(monthlyPayment);
 };
 
 const calculateAmortizationSchedule = function ({
@@ -21,6 +34,8 @@ const calculateAmortizationSchedule = function ({
   yearlyRate,
   totalPayments,
 }) {
+  //TODO: Handle invalid inputs
+
   const monthlyRate = yearlyRate / 12;
   let amount = initalAmount;
   let interestPaid = 0;
@@ -28,17 +43,17 @@ const calculateAmortizationSchedule = function ({
 
   for (let i = 0; i < totalPayments; i++) {
     // Principal Payment = Total Monthly Payment - [Outstanding Loan Balance × (Interest Rate/12 Months)]
-    const principalPayment = roundTo(monthlyPayment - amount * monthlyRate, 2);
-    const interestPayment = roundTo(monthlyPayment - principalPayment, 2);
+    const principalPayment = round(monthlyPayment - amount * monthlyRate, 2);
+    const interestPayment = round(monthlyPayment - principalPayment, 2);
 
-    amount -= roundTo(principalPayment, 2);
-    interestPaid += roundTo(interestPayment, 2);
+    amount -= round(principalPayment, 2);
+    interestPaid += round(interestPayment, 2);
     schedule.push({
       period: i + 1,
       principalPayment,
       interestPayment,
-      principalBalance: roundTo(amount, 2),
-      interestPaid: roundTo(interestPaid, 2),
+      principalBalance: round(amount, 2),
+      interestPaid: round(interestPaid, 2),
     });
   }
 
