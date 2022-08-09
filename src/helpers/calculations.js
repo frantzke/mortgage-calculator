@@ -61,7 +61,6 @@ const calculateAmortizationSchedule = function ({
   let amount = initalAmount;
   let interestPaid = 0;
   const schedule = [];
-  debugger;
 
   for (let i = 0; i < totalPayments; i++) {
     // Principal Payment = Payment - [Outstanding Loan Balance × (Interest Rate/ Yearly Payments)]

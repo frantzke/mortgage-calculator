@@ -1,29 +1,12 @@
 # mortgage-calculator
 
-## Project setup
-```
-npm install
-```
+VueJs mortgage calculator app.
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+### Project setup
 
-### Compiles and minifies for production
+```JavaScript
+npm install //Installs dependencies
+npm run serve //Compiles and hot-reloads for development
+npm run build //Compiles and minifies for production
+npm run test:unit //Runs unit tests
 ```
-npm run build
-```
-
-### Run your unit tests
-```
-npm run test:unit
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
