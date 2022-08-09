@@ -46,7 +46,7 @@
 import { roundTo } from "round-to";
 import { mapActions } from "vuex";
 
-import { calculateMonthlyPayment, calculateAmortizationSchedule } from "../helpers/calculations";
+import { calculatePayment, calculateAmortizationSchedule } from "../helpers/calculations";
 
 export default {
   name: "FormComponent",
@@ -145,7 +145,7 @@ export default {
         return {};
       }
 
-      const monthlyPayment = calculateMonthlyPayment({
+      const payment = calculatePayment({
         amount: amt,
         yearlyRate,
         period,
@@ -156,10 +156,11 @@ export default {
 
       // Calculate principal + interest amounts
       const schedule = calculateAmortizationSchedule({
-        monthlyPayment,
+        payment: payment,
         initalAmount: amount,
         yearlyRate,
         totalPayments,
+        numYearlyPayments: yearlyPayments,
       });
 
       //Update Schedule
@@ -178,7 +179,7 @@ export default {
         period,
         totalPayments,
         yearlyPayments,
-        monthlyPayment,
+        monthlyPayment: payment,
         amount,
         totalInterest,
         totalPaid: roundTo(amount + totalInterest, 2),
@@ -194,7 +195,7 @@ export default {
       // this.summary = summary;
     },
 
-    calculateMonthlyPayment({ amount, yearlyRate, period, yearlyPayments }) {
+    calculatePayment({ amount, yearlyRate, period, yearlyPayments }) {
       const monthlyRate = yearlyRate / 12;
       const totalPayments = yearlyPayments * period;
 
