@@ -1,40 +1,39 @@
 <template>
   <div v-if="summary" class="text-left">
-    <h3>
-      Over the <b>{{ summary.period }}</b
-      >-year amortization period, you will:
-    </h3>
-    <ul class="ml-8">
+    <h2 class="mb-2">Mortgage Summary</h2>
+    <h4>Over the {{ summary.period }}-year amortization period, you will:</h4>
+    <ul class="ml-8 mb-2">
       <li>
-        have made {{ summary.totalPayments }} monthly ({{ summary.yearlyPayments }}x per year)
-        payments of ${{ summary.monthlyPayment }}.
+        have made {{ summary.totalPayments }} payments ({{ summary.yearlyPayments }}x per year)
+        payments of {{ format(summary.payment) }}.
       </li>
       <li>
-        have paid ${{ summary.amount }} in principal, ${{ summary.totalInterest }} in interest, for
-        a total of ${{ summary.totalPaid }}.
+        have paid {{ format(summary.amount) }} in principal, {{ format(summary.totalInterest) }} in
+        interest, for a total of {{ format(summary.totalPaid) }}.
       </li>
     </ul>
 
-    <h3>Over the {{ summary.term }}-year term, you will:</h3>
-    <ul class="ml-8">
+    <h4>Over the {{ term.period }}-year term, you will:</h4>
+    <ul class="ml-8 mb-2">
       <li>
-        have made {{ summary.termPayments }} monthly ({{ summary.yearlyPayments }}x per year)
-        payments of ${{ summary.monthlyPayment }}.
+        have made {{ term.payments }} payments ({{ summary.yearlyPayments }}x per year) payments of
+        {{ format(summary.payment) }}.
       </li>
       <li>
-        have paid ${{ summary.termPricipalPaid }} in principal, ${{ summary.termInterestPaid }} in
-        interest, for a total of ${{ summary.termTotalPaid }}.
+        have paid {{ format(term.principalPaid) }} in principal, {{ format(term.interestPaid) }} in
+        interest, for a total of {{ format(term.totalPaid) }}.
       </li>
     </ul>
 
-    <h3>At the end of your {{ summary.term }}-year term, you will:</h3>
+    <h4>At the end of your {{ term.period }}-year term, you will:</h4>
     <ul class="ml-8">
-      <li>have a balance of {{ summary.termBalance }}.</li>
+      <li>have a balance of {{ format(term.balance) }}.</li>
     </ul>
   </div>
 </template>
 <script>
 import { mapGetters } from "vuex";
+import { formatCurrency } from "../helpers/formatter";
 
 export default {
   name: "SummaryComponent",
@@ -42,6 +41,14 @@ export default {
   data: () => ({}),
   computed: {
     ...mapGetters(["summary"]),
+    term() {
+      return this.summary.term;
+    },
+  },
+  methods: {
+    format(num) {
+      return formatCurrency(num);
+    },
   },
 };
 </script>
