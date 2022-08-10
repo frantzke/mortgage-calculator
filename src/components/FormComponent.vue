@@ -78,6 +78,7 @@
         </v-col>
       </v-row>
     </v-container>
+    <v-snackbar v-model="hasError" color="error"> Invalid Input </v-snackbar>
   </form>
 </template>
 
@@ -115,6 +116,7 @@ export default {
     ],
     term: 5,
     terms: null,
+    hasError: false,
   }),
 
   computed: {},
@@ -153,15 +155,24 @@ export default {
       return periods;
     },
     onSubmit() {
-      // TODO: Should validate inputs here
-      // TODO: Show snackbar message for invalid inputs
+      const amount = parseFloat(this.amount);
+      const rate = parseFloat(this.rate);
+      const period = parseInt(this.period);
+      const frequency = parseInt(this.frequency);
+      const term = parseInt(this.term);
+
+      if (isNaN(amount) || isNaN(rate) || isNaN(period) || isNaN(frequency) || isNaN(term)) {
+        console.error("Invalid input");
+        this.hasError = true;
+        return;
+      }
 
       this.calculateMortgage({
-        amount: this.amount,
-        rate: this.rate,
-        period: this.period,
-        frequency: this.frequency,
-        term: this.term,
+        amount,
+        rate,
+        period,
+        frequency,
+        term,
       });
     },
     calculateMortgage({ amount, rate, period, frequency, term }) {

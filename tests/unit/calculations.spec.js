@@ -57,7 +57,6 @@ describe("calculations.js", () => {
         };
         const payment = calculatePayment(stringAmount);
 
-        //TODO: Should convert to float?
         const expected = 0;
         expect(payment).toEqual(expected);
       });
