@@ -230,7 +230,7 @@ describe("calculations.js", () => {
         payment: 584.59,
         initalAmount: 100000,
         yearlyRate: 0.05,
-        totalPayments: 300,
+        period: 25,
         numYearlyPayments: 12,
       });
       const firstPayment = schedule[0];

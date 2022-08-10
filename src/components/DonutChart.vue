@@ -1,7 +1,7 @@
 <template>
   <div v-if="summary">
     <h4>Regular Payment</h4>
-    <h2 class="mb-4">{{ format(summary.monthlyPayment) }}</h2>
+    <h2 class="mb-4">{{ format(summary.payment) }}</h2>
     <vc-donut
       background="white"
       :size="300"
@@ -23,31 +23,24 @@ import { formatCurrency } from "@/helpers/formatter";
 export default {
   name: "DonutChart",
   data() {
-    return {
-      //   sections: [
-      //     { label: "Loan Amount", value: 50, color: "#3c89ff" },
-      //     { label: "Total Interest Paid", value: 50, color: "#f64e00" },
-      //   ],
-    };
+    return {};
   },
   computed: {
     ...mapGetters(["summary"]),
     sections() {
-      if (!this.summary) {
-        return [];
-      }
-      const sections = [];
-      sections.push({
-        label: `${this.format(this.summary.totalInterest)} Interest`,
-        value: this.summary.totalInterest,
-        color: "#f64e00",
-      });
-      sections.push({
-        label: `${this.format(this.summary.amount)} Loan`,
-        value: this.summary.amount,
-        color: "#3c89ff",
-      });
-      return sections;
+      if (!this.summary) return [];
+      return [
+        {
+          label: `${this.format(this.summary.totalInterest)} Interest`,
+          value: this.summary.totalInterest,
+          color: "#f64e00",
+        },
+        {
+          label: `${this.format(this.summary.amount)} Loan`,
+          value: this.summary.amount,
+          color: "#3c89ff",
+        },
+      ];
     },
     total() {
       if (!this.summary) return 0;

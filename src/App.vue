@@ -4,10 +4,12 @@
       <v-container class="main-content">
         <v-row class="text-center">
           <v-col cols="12"><h1>Mortgage Calculator</h1></v-col>
-          <v-col sm="12" md="6">
+          <v-col sm="12" md="7">
             <FormComponent />
           </v-col>
-          <v-col sm="12" md="6"> <DonutChart /></v-col>
+          <v-col sm="12" md="5">
+            <DonutChart />
+          </v-col>
           <v-col cols="12">
             <SummaryComponent />
           </v-col>
@@ -37,13 +39,7 @@ export default {
   },
 
   data: () => {
-    return {
-      sections: [
-        { label: "Red section", value: 25, color: "red" },
-        { label: "Green section", value: 25, color: "green" },
-        { label: "Blue section", value: 25, color: "blue" },
-      ],
-    };
+    return {};
   },
 };
 </script>

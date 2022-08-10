@@ -2,18 +2,32 @@ const round = (num) => {
   return Math.round(num * 100) / 100;
 };
 
+/**
+ * Calculates the regular payment of a mortgage. Returns the amount
+ *
+ * @param {object} MortgageInfo
+ * @param {number} mortgageInfo.amount            Amount of the mortgage
+ * @param {number} mortgageInfo.yearlyRate        Yearly interest rate of the mortgage
+ * @param {number} mortgageInfo.period            Amortization period of the mortgage
+ * @param {number} mortgageInfo.numYearlyPayments Number of payments to the mortgage in a year
+ *
+ * @returns {number} regular payment amount
+ */
 const calculatePayment = function ({ amount, yearlyRate, period, numYearlyPayments }) {
+  //amount should be greater than 0
   const amt = parseFloat(amount);
   if (typeof amount !== "number" || isNaN(amt) || amt < 0) {
     console.log(`calculatePayment: amount ${amount} is invalid`);
     return 0;
   }
+
   //yearlyRate should be between 1.00 and 0.00
   const rate = parseFloat(yearlyRate);
   if (typeof yearlyRate !== "number" || isNaN(rate) || rate <= 0 || rate > 1) {
     console.log(`calculatePayment: yearlyRate ${yearlyRate} is invalid`);
     return 0;
   }
+
   //period should be between 1 and 30
   const ammortization = parseInt(period);
   if (
@@ -48,19 +62,32 @@ const calculatePayment = function ({ amount, yearlyRate, period, numYearlyPaymen
   return round(payment);
 };
 
+/**
+ * Calculates amortization schedule of a mortgage. Returns the schedule as an array
+ *
+ * @param {object} mortgageInfo
+ * @param {number} mortgageInfo.payment           Mortgage regular payment amount
+ * @param {number} mortgageInfo.initalAmount      Initial amount of the mortgage
+ * @param {number} mortgageInfo.yearlyRate        Yearly interest rate of the mortgage
+ * @param {number} mortgageInfo.period            Amortization period of the mortgage
+ * @param {number} mortgageInfo.numYearlyPayments Number of payments to the mortgage in a year
+ *
+ * @returns {Array} amortization schedule
+ */
 const calculateAmortizationSchedule = function ({
   payment,
   initalAmount,
   yearlyRate,
-  totalPayments,
+  period,
   numYearlyPayments,
 }) {
   //TODO: Handle invalid inputs
-
   const rate = yearlyRate / numYearlyPayments;
+  const totalPayments = numYearlyPayments * period;
+  const schedule = [];
+
   let amount = initalAmount;
   let interestPaid = 0;
-  const schedule = [];
 
   for (let i = 0; i < totalPayments; i++) {
     // Principal Payment = Payment - [Outstanding Loan Balance × (Interest Rate/ Yearly Payments)]
@@ -82,6 +109,7 @@ const calculateAmortizationSchedule = function ({
 };
 
 module.exports = {
+  round,
   calculatePayment,
   calculateAmortizationSchedule,
 };
