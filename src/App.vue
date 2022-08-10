@@ -1,12 +1,13 @@
 <template>
   <v-app>
     <v-main>
-      <v-container>
+      <v-container class="main-content">
         <v-row class="text-center">
-          <v-col cols="12"><h3>Mortgage Calculator</h3></v-col>
-          <v-col cols="12">
+          <v-col cols="12"><h1>Mortgage Calculator</h1></v-col>
+          <v-col sm="12" md="6">
             <FormComponent />
           </v-col>
+          <v-col sm="12" md="6"> <DonutChart /></v-col>
           <v-col cols="12">
             <SummaryComponent />
           </v-col>
@@ -21,6 +22,7 @@
 
 <script>
 import FormComponent from "./components/FormComponent.vue";
+import DonutChart from "./components/DonutChart.vue";
 import ScheduleTable from "./components/ScheduleTable.vue";
 import SummaryComponent from "./components/SummaryComponent.vue";
 
@@ -29,10 +31,24 @@ export default {
 
   components: {
     FormComponent,
+    DonutChart,
     ScheduleTable,
     SummaryComponent,
   },
 
-  data: () => ({}),
+  data: () => {
+    return {
+      sections: [
+        { label: "Red section", value: 25, color: "red" },
+        { label: "Green section", value: 25, color: "green" },
+        { label: "Blue section", value: 25, color: "blue" },
+      ],
+    };
+  },
 };
 </script>
+<style>
+.main-content {
+  max-width: 1200px;
+}
+</style>

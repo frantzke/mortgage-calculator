@@ -1,13 +1,13 @@
 <template>
   <div v-if="summary" class="text-left">
     <h2 class="mb-2">Mortgage Summary</h2>
-    <h3>
+    <h4>
       Over the <b>{{ summary.period }}</b
       >-year amortization period, you will:
-    </h3>
+    </h4>
     <ul class="ml-8">
       <li>
-        have made {{ summary.totalPayments }} monthly ({{ summary.yearlyPayments }}x per year)
+        have made {{ summary.totalPayments }} payments ({{ summary.yearlyPayments }}x per year)
         payments of {{ format(summary.monthlyPayment) }}.
       </li>
       <li>
@@ -16,10 +16,10 @@
       </li>
     </ul>
 
-    <h3>Over the {{ summary.term }}-year term, you will:</h3>
+    <h4>Over the {{ summary.term }}-year term, you will:</h4>
     <ul class="ml-8">
       <li>
-        have made {{ summary.termPayments }} monthly ({{ summary.yearlyPayments }}x per year)
+        have made {{ summary.termPayments }} payments ({{ summary.yearlyPayments }}x per year)
         payments of {{ format(summary.monthlyPayment) }}.
       </li>
       <li>
@@ -29,7 +29,7 @@
       </li>
     </ul>
 
-    <h3>At the end of your {{ summary.term }}-year term, you will:</h3>
+    <h4>At the end of your {{ summary.term }}-year term, you will:</h4>
     <ul class="ml-8">
       <li>have a balance of {{ format(summary.termBalance) }}.</li>
     </ul>

@@ -1,17 +1,45 @@
 <template>
   <form>
     <v-container>
-      <v-row>
+      <v-row no-gutters>
         <v-col cols="12">
-          <v-text-field v-model="amount" label="Mortgage Amount" type="number" required />
+          <v-text-field
+            v-model="amount"
+            label="Mortgage Amount"
+            type="number"
+            required
+            hide-details
+          />
+          <v-slider
+            color="primary"
+            v-model="amount"
+            :min="0"
+            :max="1000000"
+            :step="10000"
+            thumb-label
+          ></v-slider>
         </v-col>
-        <v-col cols="12">
-          <v-slider v-model="amount" :min="0" :max="1000000" :step="10000" thumb-label></v-slider>
-        </v-col>
+        <!-- <v-col cols="12">
+        </v-col> -->
       </v-row>
       <v-row>
         <v-col cols="12" md="6">
-          <v-text-field v-model="rate" label="Interest Rate" type="number" suffix="%" required />
+          <v-text-field
+            v-model="rate"
+            label="Interest Rate"
+            type="number"
+            suffix="%"
+            required
+            hide-details
+          />
+          <v-slider
+            color="primary"
+            v-model="rate"
+            :min="0"
+            :max="100"
+            :step="1"
+            thumb-label
+          ></v-slider>
         </v-col>
         <v-col cols="12" md="6">
           <v-select v-model="term" :items="terms" item-title="label" label="Term" required />
@@ -36,8 +64,10 @@
             required
           />
         </v-col>
+        <v-col cols="12" class="d-flex justify-end">
+          <v-btn color="primary" @click="submit">Calculate </v-btn>
+        </v-col>
       </v-row>
-      <v-btn class="my-4" @click="submit">Calculate </v-btn>
     </v-container>
   </form>
 </template>

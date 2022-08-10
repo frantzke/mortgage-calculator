@@ -14,6 +14,7 @@
     "roboto-fontface": "*",
     "round-to": "^6.0.0",
     "vue": "^3.2.13",
+    "vue-css-donut-chart": "^2.0.0",
     "vuelidate": "^0.7.7",
     "vuetify": "^3.0.0-beta.0",
     "vuex": "^4.0.0",

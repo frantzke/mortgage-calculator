@@ -1,4 +1,5 @@
 <template>
+  <h2 class="mb-2 text-left" v-if="schedule.length > 0">Payment Schedule</h2>
   <v-table v-if="schedule.length > 0">
     <thead>
       <tr>
