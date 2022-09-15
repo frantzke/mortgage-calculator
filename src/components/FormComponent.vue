@@ -6,10 +6,13 @@
           <v-text-field
             v-model="amount"
             label="Mortgage Amount"
-            type="number"
             variant="outlined"
             required
-            hide-details
+            hide-details="auto"
+            :rules="[
+              v => !!v || 'Amount is required',
+              v => parseFloat(v) > 0 || 'Amount must be greater than 0',
+            ]"
           />
           <v-slider
             color="#3c89ff"
@@ -30,7 +33,12 @@
             variant="outlined"
             suffix="%"
             required
-            hide-details
+            hide-details="auto"
+            :rules="[
+              v => !!v || 'Rate is required',
+              v => parseFloat(v) > 0 || 'Rate must be greater than 0',
+              v => parseFloat(v) < 100 || 'Rate must be less than 100',
+            ]"
           />
           <v-slider
             color="#3c89ff"
@@ -119,7 +127,8 @@ export default {
     hasError: false,
   }),
 
-  computed: {},
+  computed: {
+  },
 
   created() {
     this.terms = this.generateTerms(10);
@@ -154,6 +163,7 @@ export default {
         });
       return periods;
     },
+
     onSubmit() {
       const amount = parseFloat(this.amount);
       const rate = parseFloat(this.rate);
@@ -167,6 +177,12 @@ export default {
         return;
       }
 
+      if (amount < 0 || !( 0 < rate && rate < 100)) {
+        console.error("Invalid input");
+        this.hasError = true;
+        return;
+      }
+
       this.calculateMortgage({
         amount,
         rate,
@@ -175,6 +191,7 @@ export default {
         term,
       });
     },
+
     calculateMortgage({ amount, rate, period, frequency, term }) {
       const yearlyRate = parseFloat(rate) / 100;
       const numYearlyPayments = parseInt(frequency);
@@ -185,6 +202,12 @@ export default {
         period,
         numYearlyPayments,
       });
+
+      if (payment === 0) {
+        console.error("Invalid input");
+        this.hasError = true;
+        return;
+      }
 
       // Calculate principal + interest amounts
       const schedule = calculateAmortizationSchedule({
